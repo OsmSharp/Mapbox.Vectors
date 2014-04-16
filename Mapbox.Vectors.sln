@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mapbox.Vectors", "Mapbox.Vectors\Mapbox.Vectors.csproj", "{4319A2DC-E470-4DE8-8546-7511D316771C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mapbox.Vectors.Tests", "Mapbox.Vectors.Tests\Mapbox.Vectors.Tests.csproj", "{7F38C463-DFE8-4FED-BED1-F924D4B4F64F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4319A2DC-E470-4DE8-8546-7511D316771C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4319A2DC-E470-4DE8-8546-7511D316771C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4319A2DC-E470-4DE8-8546-7511D316771C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4319A2DC-E470-4DE8-8546-7511D316771C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F38C463-DFE8-4FED-BED1-F924D4B4F64F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F38C463-DFE8-4FED-BED1-F924D4B4F64F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F38C463-DFE8-4FED-BED1-F924D4B4F64F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F38C463-DFE8-4FED-BED1-F924D4B4F64F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Mapbox.Vectors\Mapbox.Vectors.csproj
+	EndGlobalSection
+EndGlobal
