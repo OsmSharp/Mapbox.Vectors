@@ -7,16 +7,16 @@ using System.Linq;
 
 namespace Mapbox.Vectors.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     public class ParseTest
     {
         /// <summary>
         /// A simple parsing test based on the js-test in: https://github.com/mapbox/vector-tile-js/blob/master/test/parse.test.js
         /// </summary>
-        [Test()]
+        [Test]
         public void ParseTest1()
         {
-            var pbfStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Mapbox.Vectors.14-8801-5371.vector.pbf");
+            var pbfStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Mapbox.Vectors.Tests.14-8801-5371.vector.pbf");
 
             var tile = Serializer.Deserialize<tile>(pbfStream);
 
@@ -25,7 +25,7 @@ namespace Mapbox.Vectors.Tests
 
             // should contain all layers.
             Assert.IsNotNull(tile.layers, "No layers.");
-            Assert.AreEqual(14, tile.layers.Count, "Not the correct number of layers.");
+            Assert.AreEqual(20, tile.layers.Count, "Not the correct number of layers.");
             foreach (var layerThatShould in new string[] {
                 "landuse", "waterway", "water", "barrier_line", "building",
                 "landuse_overlay", "tunnel", "road", "bridge", "place_label",
