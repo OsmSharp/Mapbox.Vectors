@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -21,7 +22,7 @@ namespace Mapbox.Vectors.Tests
         {
             var pbfStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Mapbox.Vectors.Tests.14-8801-5371.vector.pbf");
 
-            var tile = Serializer.Deserialize<tile>(pbfStream);
+            var tile = Serializer.Deserialize<VectorTile>(pbfStream);
 
             // something was deserialized.
             Assert.IsNotNull(tile, "Nothing was deserialized.");
@@ -41,30 +42,56 @@ namespace Mapbox.Vectors.Tests
         [Test]
         public void CompareToOriginalJson()
         {
-            var jsonTile = GetJsonVectorTile();
-            var protobufTile = GetProtobufVectorTile();
+            var jsonTile = GetJsonTile();
+            var ptfTile = GetPtfTile();
 
-            Assert.AreEqual(protobufTile.layers.Count, jsonTile.Keys.Count);
-            Assert.True(CompareLayers(protobufTile, jsonTile));
+            Assert.AreEqual(ptfTile.layers.Count, jsonTile.Keys.Count);
+            Assert.True(Compare(ptfTile, jsonTile));
         }
 
-        private bool CompareLayers(tile protobufTile, Dictionary<string, FeatureCollection> jsonTile)
+        private bool Compare(VectorTile ptfTile, Dictionary<string, FeatureCollection> jsonTile)
         {
-            foreach (var layer in protobufTile.layers)
+            foreach (var ptfLayer in ptfTile.layers)
             {
-                if (!jsonTile.ContainsKey(layer.name)) return false;
+                if (!jsonTile.ContainsKey(ptfLayer.name)) return false;
+                var jsonLayer = jsonTile[ptfLayer.name];
+                foreach (var ptfFeature in ptfLayer.features)
+                {
+                    var ptfProperties = ptfFeature.GetProperties(ptfLayer);
+                    var jsonFeature = FindMatchingFeature(jsonLayer.Features, ptfProperties);
+                    if (!ArePropertiesEqual(ptfProperties, jsonFeature.Properties)) return false;
+                }
             }
             return true;
         }
 
-        private static tile GetProtobufVectorTile()
+        private bool ArePropertiesEqual(IDictionary<string, VectorTile.Value> ptfProperties, Dictionary<string, object> jsonProperties)
+        {
+            if (ptfProperties.Count != jsonProperties.Count) return false;
+
+            foreach (var ptfProperty in ptfProperties)
+            {
+                if (jsonProperties[ptfProperty.Key].ToString() != ptfProperty.Value.GetValueAsString()) return false;
+            }
+
+            return true;
+        }
+
+        private static Feature FindMatchingFeature(List<Feature> features, IDictionary<string, VectorTile.Value> ptfProperties)
+        {
+            // The "id" field happens to be present in the sample data so Iuse it here to map the features, 
+            // however these need not be there in other tile sources.
+            return features.Find(f => ((long)f.Properties["id"]) == ptfProperties["id"].int_value);
+        }
+
+        private static VectorTile GetPtfTile()
         {
             const string jsonResourceName = "Mapbox.Vectors.Tests.Resources.24641.mvt";
             var jsonStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(jsonResourceName);
-            return Serializer.Deserialize<tile>(jsonStream);
+            return Serializer.Deserialize<VectorTile>(jsonStream);
         }
 
-        private static Dictionary<string, FeatureCollection> GetJsonVectorTile()
+        private static Dictionary<string, FeatureCollection> GetJsonTile()
         {
             const string jsonResourceName = "Mapbox.Vectors.Tests.Resources.24641.json";
             var jsonStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(jsonResourceName);
