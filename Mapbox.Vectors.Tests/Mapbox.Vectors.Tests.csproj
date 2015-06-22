@@ -31,6 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GeoJSON.Net">
+      <HintPath>..\packages\GeoJSON.Net.0.1.38\lib\GeoJSON.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -53,7 +59,10 @@
     <EmbeddedResource Include="14-8801-5371.vector.pbf" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Resources\24641.json" />
+    <EmbeddedResource Include="Resources\24641.mvt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mapbox.Vectors\Mapbox.Vectors.csproj">

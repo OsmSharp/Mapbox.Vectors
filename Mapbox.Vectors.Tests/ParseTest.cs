@@ -1,9 +1,12 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
-using ProtoBuf;
+using System.Text;
+using GeoJSON.Net.Feature;
 using mapnik.vector;
-using System.Linq;
+using Newtonsoft.Json;
+using NUnit.Framework;
+using ProtoBuf;
 
 namespace Mapbox.Vectors.Tests
 {
@@ -26,30 +29,56 @@ namespace Mapbox.Vectors.Tests
             // should contain all layers.
             Assert.IsNotNull(tile.layers, "No layers.");
             Assert.AreEqual(20, tile.layers.Count, "Not the correct number of layers.");
-            foreach (var layerThatShould in new string[] {
+            foreach (var layerThatShould in new [] {
                 "landuse", "waterway", "water", "barrier_line", "building",
                 "landuse_overlay", "tunnel", "road", "bridge", "place_label",
                 "water_label", "poi_label", "road_label", "waterway_label" })
             {
                 Assert.IsTrue(tile.layers.Exists(x => x.name.Equals(layerThatShould)));
             }
-//
-//            it('should extract the tags of a feature', function() {
-//                var tile = new VectorTile(data);
-//
-//                assert.equal(tile.layers.poi_label.length, 558);
-//
-//                var park = tile.layers.poi_label.feature(11);
-//
-//                assert.equal(park.name, 'Mauerpark');
-//                assert.equal(park.type, 'Park');
-//
-//                // Check point geometry
-//                assert.deepEqual(park.loadGeometry(), [ [ { x: 3898, y: 1731 } ] ]);
-//
-//                // Check line geometry
-//                assert.deepEqual(tile.layers.road.feature(656).loadGeometry(), [ [ { x: 1988, y: 306 }, { x: 1808, y: 321 }, { x: 1506, y: 347 } ] ]);
-//            });
+        }
+
+        [Test]
+        public void CompareToOriginalJson()
+        {
+            var jsonTile = GetJsonVectorTile();
+            var protobufTile = GetProtobufVectorTile();
+
+            Assert.AreEqual(protobufTile.layers.Count, jsonTile.Keys.Count);
+            Assert.True(CompareLayers(protobufTile, jsonTile));
+        }
+
+        private bool CompareLayers(tile protobufTile, Dictionary<string, FeatureCollection> jsonTile)
+        {
+            foreach (var layer in protobufTile.layers)
+            {
+                if (!jsonTile.ContainsKey(layer.name)) return false;
+            }
+            return true;
+        }
+
+        private static tile GetProtobufVectorTile()
+        {
+            const string jsonResourceName = "Mapbox.Vectors.Tests.Resources.24641.mvt";
+            var jsonStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(jsonResourceName);
+            return Serializer.Deserialize<tile>(jsonStream);
+        }
+
+        private static Dictionary<string, FeatureCollection> GetJsonVectorTile()
+        {
+            const string jsonResourceName = "Mapbox.Vectors.Tests.Resources.24641.json";
+            var jsonStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(jsonResourceName);
+            return JsonConvert.DeserializeObject<Dictionary<string, FeatureCollection>>(ToString(jsonStream));
+        }
+
+        private static string ToString(Stream jsonStream)
+        {
+            string jsonString;
+            using (var reader = new StreamReader(jsonStream, Encoding.UTF8))
+            {
+                jsonString = reader.ReadToEnd();
+            }
+            return jsonString;
         }
     }
 }
