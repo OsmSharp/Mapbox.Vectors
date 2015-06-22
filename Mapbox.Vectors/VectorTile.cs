@@ -10,7 +10,6 @@
 // Generated from: vector_tile.proto
 namespace mapnik.vector
 {
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"tile")]
   public partial class tile : global::ProtoBuf.IExtensible
   {
     public tile() {}
@@ -22,7 +21,6 @@ namespace mapnik.vector
       get { return _layers; }
     }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"value")]
   public partial class value : global::ProtoBuf.IExtensible
   {
     public value() {}
@@ -88,7 +86,6 @@ namespace mapnik.vector
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"feature")]
   public partial class feature : global::ProtoBuf.IExtensible
   {
     public feature() {}
@@ -128,7 +125,6 @@ namespace mapnik.vector
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"layer")]
   public partial class layer : global::ProtoBuf.IExtensible
   {
     public layer() {}

@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mapbox.Vectors\Mapbox.Vectors.csproj">
-      <Project>{4319A2DC-E470-4DE8-8546-7511D316771C}</Project>
+      <Project>{1c9d479b-a0a6-4044-8f8b-0edbeaf7064a}</Project>
       <Name>Mapbox.Vectors</Name>
     </ProjectReference>
   </ItemGroup>
